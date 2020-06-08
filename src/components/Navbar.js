@@ -1,36 +1,44 @@
 import React from 'react'
-import {Link} from "react-router-dom";
-import  firebase  from '../firebase/config';
+import { Link } from "react-router-dom";
+import firebase from '../firebase/config';
+
 export default class Navbar extends React.Component {
 
-  render(){
-  return (
-    <nav className="navbar navbar-expand-sm navbar navbar-dark bg-dark">
-    <div className="container">
-    <Link className="navbar-brand" to="/">TrulyImages</Link>
-    <button className="navbar-toggler" type="button"
-    data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-      <span className="navbar-toggler-icon"></span>
-    </button>
-    <div className="collapse navbar-collapse" id="navbarText">
-      <ul className="navbar-nav mr-auto">
+  constructor(props) {
+    super(props);
+    this.state = {
+      menu: false
+    };
+    this.toggleMenu = this.toggleMenu.bind(this);
+  }
+
+  toggleMenu() {
+    this.setState({ menu: !this.state.menu })
+  }
+
+  render() {
+
+    const show = (this.state.menu) ? "show" : "";
+
+    return (
 
 
-        <li className="nav-item">
-          <Link className="nav-link" to="upload">Upload</Link>
-        </li>
-      </ul>
-      <span className="navbar-text" onClick={()=>{
-        localStorage.removeItem("user_id");
-        firebase.auth().signOut();
-      }}
-        >
-      Signout
-      </span>
-    </div>
-    </div>
-  </nav>
-  )
-}
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <Link className="navbar-brand" to="/">UITech</Link>
+        <button className="navbar-toggler" type="button" onClick={this.toggleMenu}>
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className={"collapse navbar-collapse " + show}>
+          <div className="navbar-nav">
+            <Link className="nav-link" to="upload">Upload Images</Link>
+            <span className="navbar-text my-2 my-lg-0" onClick={() => {
+              localStorage.removeItem("user_id");
+              firebase.auth().signOut();
+            }}>Signout</span>
+          </div>
+        </div>
+      </nav>
+    );
+  }
 
 }
